@@ -1,5 +1,6 @@
 {
 	"name": "react-essentials-start",
+	"homepage": "http://liquiseife.com/",
 	"version": "0.0.0",
 	"scripts": {
 		"dev": "vite",
