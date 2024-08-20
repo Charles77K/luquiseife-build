@@ -1,0 +1,60 @@
+.quality-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: flex-start; 
+    justify-content: center;
+    color: black;
+    margin-bottom: 60px;
+}
+.quality-header {
+	margin-bottom: 28px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	color: black;
+  }
+
+  .quality-header text{
+	font-size: 30px;
+	padding: 5px;
+	color: #000;
+	font-weight: 600;
+  }
+  .quality-header h4{
+	font-weight: 400;
+  }
+  .qualities-title::after {
+    content: " Qualities";
+    color: #007BFF; 
+    font-weight: bold; 
+}
+
+  .title h2 {
+	font-size: 28px;
+	color: #333;
+	margin-top: 5px;
+  }
+  
+.quality-main {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+	  gap: 5px;
+    padding: 10px;
+    width: 250px; /* Add a fixed width to ensure items are aligned */
+}
+
+.quality-main img {
+    height: 100px;
+    width: 100px;
+    object-fit: cover; /* Ensure images maintain aspect ratio and don't distort */
+}
+
+.bottom-text {
+    text-align: center;
+    width: 100%; /* Ensure text takes the full width of the parent container */
+}
+

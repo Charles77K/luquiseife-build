@@ -1,0 +1,17 @@
+.contact-card{
+	flex: 1;
+	display: flex;
+	background-color: #fff;
+	justify-content: space-between;
+	flex-direction: column;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	margin: 0 auto;
+	padding: 20px;
+	border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+.contact-icon{
+	padding: 1px 6px;
+	margin-bottom: 20px;
+}

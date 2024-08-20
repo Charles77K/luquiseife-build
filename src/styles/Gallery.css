@@ -1,0 +1,23 @@
+.image-gallery {
+	padding: 60px;
+	display: flex;
+	flex-wrap: wrap; /* Allow images to wrap to the next line */
+	gap: 60px; /* Space between images */
+	justify-content: center; /* Center the gallery */
+	margin-bottom: 20px;
+  }
+  
+  .gallery-image {
+	width: 400px; /* Set a fixed width or adjust as needed */
+	height: 300px; /* Maintain the aspect ratio */
+	border-radius: 8px;
+	object-fit: cover; /* Cover the container with the image */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	transition: transform 0.3s ease;
+  }
+  
+  .gallery-image:hover {
+	transform: scale(1.01); 
+	cursor: pointer;/* Slightly enlarge the image on hover */
+  }
+  

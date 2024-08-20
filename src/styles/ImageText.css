@@ -1,0 +1,109 @@
+.imgtxt-container {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    align-items: center;
+	justify-content: space-around;
+    margin: 0 auto;
+    width: 80%;
+	max-height: 30rem;
+    padding: 0rem 0.1rem;
+	background-color: #007bff09;
+	margin-bottom: 2	0px;
+}
+
+.image-container {
+    flex: 1; /* This ensures the image container takes up the remaining space */
+    max-width: 100%;
+	max-height: 30rem; /* Limit the image container's width */
+}
+
+.image-container img {
+    width: 30rem;
+    height: 30rem;
+    object-fit: cover;
+}
+
+.inner-imgtxt {
+    flex: 1; /* This ensures the text container takes up the remaining space */
+    padding: 20px;
+    max-width: 80%; 
+	gap: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.inner-imgtxt h1 {
+    font-size: 40px;
+    margin: 0;
+}
+
+.inner-imgtxt h1::after {
+    content: "our company";
+    color: #007BFF;
+}
+
+.inner-imgtxt p {
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+.inner-imgtxt button {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #000;
+    border-radius: 20px;
+	background-color: #fff;
+    color: #000;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.inner-imgtxt button:hover {
+    transform: scale(1.10);
+	border: none;
+	color: #fff;
+    cursor: pointer;
+    background: linear-gradient(45deg, #00CFFF, #007BFF);
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.7), 0 0 20px rgba(0, 123, 255, 0.5); 
+}
+
+/* Media Query for smaller screens */
+@media (max-width: 768px) {
+    .imgtxt-container {
+        flex-direction: column; 
+        align-items: center; 
+		justify-content: center;
+		width: 90%;
+		margin-top: 80px;
+    }
+
+    .image-container img {
+        width: 100% ;
+		height: 50%;
+	 }
+
+    .inner-imgtxt {
+        width: 100%; 
+        padding: 0;
+    }
+
+    .inner-imgtxt h1 {
+        font-size: 32px; /* Slightly smaller heading */
+    }
+
+    .inner-imgtxt p {
+        margin-bottom: 0.75rem; /* Smaller margin for better spacing */
+    }
+}
+
+/* Additional media query for very small screens */
+@media (max-width: 480px) {
+    .inner-imgtxt h1 {
+        font-size: 28px; /* Even smaller heading */
+    }
+
+    .inner-imgtxt p {
+        font-size: 14px; /* Slightly smaller text */
+    }
+}
