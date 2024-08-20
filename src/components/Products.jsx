@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { addItem } from "../redux/cartReducer";
 import { Snackbar } from "@mui/material";
 import axios from "axios";
+import { toast } from "react-toastify";
 import Preloader from "./Preloader";
 
 export default function Products({ bottom, header }) {
@@ -22,13 +23,13 @@ export default function Products({ bottom, header }) {
 				setProducts(response.data);
 				setIsLoading(false);
 			} else {
-				alert("err fetching data");
+				toast.error("err fetching data");
 			}
 		} catch (err) {
 			if (err.response) {
 				console.log(err.response);
 			} else {
-				alert("error fetching products");
+				toast.error("error fetching products");
 				console.log(err.message);
 			}
 		} finally {
