@@ -40,7 +40,7 @@ main {
 	border-radius: 8px;
 	box-shadow: 1px 4px 8px rgba(0, 0, 0, 0.2);
 	overflow: hidden;
-	width: 260px;
+	width: 300px;
   }
   
   .product-image img {

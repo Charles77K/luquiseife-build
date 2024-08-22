@@ -15,12 +15,14 @@ export default function Header() {
 
 	return (
 		<nav>
-			<h2>LIQUISEIFE RESOURCES</h2>
+			<h2>
+				<NavLink to="/">LIQUISEIFE RESOURCES</NavLink>
+			</h2>
 			<div className="navbar-toggle" onClick={toggleMenu}>
 				{isOpen ? (
-					<FaTimes color="#007BFF" size={30} />
+					<FaTimes color="#007BFF" size={25} />
 				) : (
-					<FaBars color="#007BFF" size={30} />
+					<FaBars color="#007BFF" size={25} />
 				)}
 			</div>
 			<ul className={isOpen ? "nav-list-open" : ""}>

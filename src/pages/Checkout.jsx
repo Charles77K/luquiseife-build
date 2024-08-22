@@ -59,7 +59,7 @@ export default function Checkout() {
 
 		try {
 			const response = await axios.post(
-				"https://ogbesomto.pythonanywhere.com/process_order",
+				"https://api.liquiseife.com/process_order",
 				{
 					checkoutData,
 				}

@@ -23,7 +23,7 @@ export default function MessageForm() {
 		setIsLoading(true);
 		try {
 			const response = await axios.post(
-				"http://api.liquiseife.com/message_us",
+				"https://api.liquiseife.com/message_us",
 				{ formData }
 			);
 			if (response.status === 200) {

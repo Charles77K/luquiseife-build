@@ -3,50 +3,47 @@ import "../styles/Products.css";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addItem } from "../redux/cartReducer";
+import { useQuery } from "react-query";
 import { Snackbar } from "@mui/material";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Preloader from "./Preloader";
 
+const getProducts = async () => {
+	try {
+		const response = await axios.get("https://api.liquiseife.com/products/");
+		if (response.status === 200) {
+			return response.data;
+		} else {
+			toast.error("Error fetching data");
+			return [];
+		}
+	} catch (err) {
+		toast.error("Error fetching products");
+		console.error(err.message);
+		return [];
+	}
+};
+
 export default function Products({ bottom, header }) {
-	const [isLoading, setIsLoading] = useState(false);
-	const [productsData, setProducts] = useState([]);
 	const [isOpen, setIsOpen] = useState(false);
 	const dispatch = useDispatch();
 
-	const getProducts = async () => {
-		setIsLoading(true);
-		try {
-			const response = await axios.get("http://api.liquiseife.com/products/");
-			console.log(response);
-			if (response.status === 200) {
-				setProducts(response.data);
-				setIsLoading(false);
-			} else {
-				toast.error("err fetching data");
-			}
-		} catch (err) {
-			if (err.response) {
-				console.log(err.response);
-			} else {
-				toast.error("error fetching products");
-				console.log(err.message);
-			}
-		} finally {
-			setIsLoading(false);
-		}
-	};
-
-	useEffect(() => {
-		getProducts();
-	}, []);
+	const {
+		data: products = [],
+		isLoading,
+		isError,
+	} = useQuery("products", getProducts, {
+		staleTime: 1000 * 60 * 5,
+		retry: 1,
+	});
 
 	const handleAddToCart = (item) => {
 		dispatch(
 			addItem({
 				id: item.id,
 				product: item.name,
-				img: `http://api.liquiseife.com${item.image}`,
+				img: `https://api.liquiseife.com${item.image}`,
 				price: item.price,
 			})
 		);
@@ -72,12 +69,12 @@ export default function Products({ bottom, header }) {
 						<h2>{header}</h2>
 					</section>
 					<section className="main-container">
-						{productsData.map((item) => (
+						{products.map((item) => (
 							<div key={item.id} className="container">
 								<div className="product-image">
 									<Link to={`/products/${item.id}`}>
 										<img
-											src={`http://api.liquiseife.com${item.image}`}
+											src={`https://api.liquiseife.com${item.image}`}
 											alt={item.name}
 										/>
 									</Link>

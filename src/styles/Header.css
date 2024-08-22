@@ -13,14 +13,16 @@ nav {
     position: sticky;
     top: 0;
     width: 100%;
-    padding: 0.1rem 0.5rem;
+    height: auto;
+    padding: 0.4rem 0.5rem;
     z-index: 1000;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
 }
 
-nav h2 {
+nav h2 a{
     color: #007BFF;
     margin: 1rem;
+    text-decoration: none !important;
 }
 
 .navbar-toggle {
@@ -84,17 +86,19 @@ nav ul li a.active {
         display: none;
         flex-direction: column;
         width: 100%;
-        margin-bottom: 0.25rem;
         background-color: #fff;
         transition: all 0.5s ease-in-out;
+        position: fixed;
+        top: 56px;
+        right: 0;
     }
 
     nav {
         flex-direction: row;
-        align-items: flex-start;
+        align-items: center;
     }
-    nav h2{
-        font-size: 19px;
+    nav h2 a{
+        font-size: 20px;
     }
     nav ul li {
         width: 100%;
