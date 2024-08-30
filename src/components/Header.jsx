@@ -13,6 +13,10 @@ export default function Header() {
 		setIsOpen((prev) => !prev);
 	};
 
+	const handleCLose = () => {
+		setIsOpen((prev) => !prev);
+	};
+
 	return (
 		<nav>
 			<h2>
@@ -27,22 +31,32 @@ export default function Header() {
 			</div>
 			<ul className={isOpen ? "nav-list-open" : ""}>
 				<li>
-					<NavLink to="/">Home</NavLink>
+					<NavLink to="/" onClick={handleCLose}>
+						Home
+					</NavLink>
 				</li>
 				<li>
-					<NavLink to="/about">About Us</NavLink>
+					<NavLink to="/about" onClick={handleCLose}>
+						About Us
+					</NavLink>
 				</li>
 				<li>
-					<NavLink to="/products">Our Products</NavLink>
+					<NavLink to="/products" onClick={handleCLose}>
+						Our Products
+					</NavLink>
 				</li>
 				<li>
-					<NavLink to="/contact">Contact Us</NavLink>
+					<NavLink to="/contact" onClick={handleCLose}>
+						Contact Us
+					</NavLink>
 				</li>
 				<li>
-					<NavLink to="/gallery">Gallery</NavLink>
+					<NavLink to="/gallery" onClick={handleCLose}>
+						Gallery
+					</NavLink>
 				</li>
 				<li className="cart-icon">
-					<Link to={"/cart"}>
+					<Link to={"/cart"} onClick={handleCLose}>
 						<BsCart4 color="#000" size={20} />
 						{cartItemCount > 0 && (
 							<span className="cart-badge">{cartItemCount}</span>

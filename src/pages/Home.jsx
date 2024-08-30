@@ -19,7 +19,8 @@ export default function Home() {
 			/>
 			<Products
 				bottom={"See More Products"}
-				header={"The Best Products We Provide"}
+				header={"We Provide the Best Products"}
+				value={4}
 			/>
 			<Qualities />
 			<ImageText />

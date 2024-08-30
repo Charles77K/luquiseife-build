@@ -7,46 +7,47 @@ export default function MessageForm() {
 	const [errors, setErrors] = useState({});
 	const [isLoading, setIsLoading] = useState(false);
 	const [formData, setFormData] = useState({
-		firstName: "",
-		lastName: "",
+		first_name: "",
+		last_name: "",
 		email: "",
 		subject: "",
-		message: "",
+		body: "",
 	});
 
 	const handleChange = (e) => {
-		setFormData({ ...formData, [e.target.name]: e.target.value });
+		const { name, value } = e.target;
+		setFormData({ ...formData, [name]: value });
 	};
+
 	// console.log(formData);
 
 	const sendMessage = async () => {
 		setIsLoading(true);
 		try {
 			const response = await axios.post(
-				"https://api.liquiseife.com/message_us",
-				{ formData }
+				"https://api.liquiseife.com/message_us/",
+				formData
 			);
-			if (response.status === 200) {
+			if (response.status === 201) {
 				toast.success("sent successfully");
-				setIsLoading(false);
 				setFormData({
-					firstName: "",
-					lastName: "",
+					first_name: "",
+					last_name: "",
 					email: "",
 					subject: "",
-					message: "",
+					body: "",
 				});
+				setErrors({});
 			} else {
 				toast.error("an error occured");
 			}
 		} catch (err) {
 			if (err.response) {
-				toast.error("something went wrong");
-				console.log("this error bad gan:", err.response);
+				console.log("Server responded with error:", err.response);
 			} else {
-				toast.error("something went wrong");
-				console.log(err);
+				console.log("Error occurred:", err);
 			}
+			toast.error("Something went wrong");
 		} finally {
 			setIsLoading(false);
 		}
@@ -56,17 +57,17 @@ export default function MessageForm() {
 		e.preventDefault();
 		const newErrors = {};
 
-		const { firstName, lastName, email, subject, message } = formData;
+		const { first_name, last_name, email, subject, body } = formData;
 
-		if (!firstName) newErrors.firstName = "First name is required";
-		if (!lastName) newErrors.lastName = "Last name is required";
+		if (!first_name) newErrors.first_name = "First name is required";
+		if (!last_name) newErrors.last_name = "Last name is required";
 		if (!email) {
 			newErrors.email = "Email is required";
 		} else if (!/\S+@\S+\.\S+/.test(email)) {
 			newErrors.email = "Email is invalid";
 		}
 		if (!subject) newErrors.subject = "Subject is required";
-		if (!message) newErrors.message = "Message is required";
+		if (!body) newErrors.body = "Message is required";
 
 		setErrors(newErrors);
 
@@ -83,12 +84,12 @@ export default function MessageForm() {
 					<input
 						className="input-field"
 						placeholder="First name"
-						name="firstName"
-						value={formData.firstName}
+						name="first_name"
+						value={formData.first_name}
 						onChange={handleChange}
 					/>
-					{errors.firstName && (
-						<span className="error">{errors.firstName}</span>
+					{errors.first_name && (
+						<span className="error">{errors.first_name}</span>
 					)}
 				</div>
 				<div className="input-group">
@@ -96,11 +97,13 @@ export default function MessageForm() {
 					<input
 						className="input-field"
 						placeholder="Last name"
-						name="lastName"
-						value={formData.lastName}
+						name="last_name"
+						value={formData.last_name}
 						onChange={handleChange}
 					/>
-					{errors.lastName && <span className="error">{errors.lastName}</span>}
+					{errors.last_name && (
+						<span className="error">{errors.last_name}</span>
+					)}
 				</div>
 			</section>
 			<div className="input-group">
@@ -130,13 +133,13 @@ export default function MessageForm() {
 				<textarea
 					className="input-field"
 					placeholder="Enter Your Message"
-					name="message"
-					value={formData.message}
+					name="body"
+					value={formData.body}
 					onChange={handleChange}
 				/>
-				{errors.message && <span className="error">{errors.message}</span>}
+				{errors.body && <span className="error">{errors.body}</span>}
 			</div>
-			<button id="send-message" type="submit">
+			<button id="send-message" type="submit" disabled={isLoading}>
 				{isLoading ? "Processing..." : "Send Message"}
 			</button>
 		</form>

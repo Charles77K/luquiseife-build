@@ -9,31 +9,33 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import Preloader from "./Preloader";
 
-const getProducts = async () => {
-	try {
-		const response = await axios.get("https://api.liquiseife.com/products/");
-		if (response.status === 200) {
-			return response.data;
-		} else {
-			toast.error("Error fetching data");
-			return [];
-		}
-	} catch (err) {
-		toast.error("Error fetching products");
-		console.error(err.message);
-		return [];
-	}
-};
-
-export default function Products({ bottom, header }) {
+export default function Products({ bottom, header, value }) {
 	const [isOpen, setIsOpen] = useState(false);
 	const dispatch = useDispatch();
+
+	const getProducts = async () => {
+		try {
+			const response = await axios.get("https://api.liquiseife.com/products/", {
+				params: value ? { limit: value } : {},
+			});
+			if (response.status === 200) {
+				return response.data;
+			} else {
+				toast.error("Error fetching data");
+				return [];
+			}
+		} catch (err) {
+			toast.error("Error fetching products");
+			console.error(err.message);
+			return [];
+		}
+	};
 
 	const {
 		data: products = [],
 		isLoading,
 		isError,
-	} = useQuery("products", getProducts, {
+	} = useQuery(["products", value], getProducts, {
 		staleTime: 1000 * 60 * 5,
 		retry: 1,
 	});

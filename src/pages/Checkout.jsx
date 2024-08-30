@@ -5,6 +5,7 @@ import { GoBack } from "../components";
 import axios from "axios";
 import { FlutterWaveButton, closePaymentModal } from "flutterwave-react-v3";
 import { toast } from "react-toastify";
+import { FaTimes } from "react-icons/fa";
 
 export default function Checkout() {
 	const [loading, setLoading] = useState(false);
@@ -15,6 +16,9 @@ export default function Checkout() {
 	const [state, setState] = useState("");
 	const [phone, setPhone] = useState("");
 	const [errors, setErrors] = useState({});
+	const [formSuccess, setFormSuccess] = useState(false);
+	const [showModal, setShowModal] = useState(false);
+	const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
 	const cartItems = useSelector((state) => state.cart.items);
 
@@ -41,97 +45,92 @@ export default function Checkout() {
 	};
 
 	const handleServerSubmit = async () => {
+		setLoading(true);
 		const checkoutData = {
-			Name: name,
-			Email: email,
-			Address: address,
-			City: city,
-			State: state,
-			PhoneNumber: phone,
+			formData: {
+				Name: name,
+				Email: email,
+				Address: address,
+				City: city,
+				State: state,
+				PhoneNumber: phone,
+			},
 			cartData: cartItems.map((item) => ({
 				id: item.id,
 				product: item.product,
 				price: item.price,
 				quantity: item.quantity,
+				TotalPrice: totalPrice,
 			})),
-			totalPrice,
 		};
-
+		console.log(checkoutData);
 		try {
 			const response = await axios.post(
-				"https://api.liquiseife.com/process_order",
-				{
-					checkoutData,
-				}
+				"https://api.liquiseife.com/process_order/",
+				checkoutData
 			);
 			if (response.status === 201) {
-				console.log("Data sent successfully");
+				console.log("form sent successfully");
 				return true;
 			} else {
-				console.log("Data submission failed");
+				toast.error("Data submission failed");
 				return false;
 			}
 		} catch (err) {
-			if (err.response) {
-				console.log(err.response);
-			} else {
-				console.log("Server error:", err);
-			}
+			toast.error("Server error. Please try again later");
+			console.log(err);
 			return false;
+		} finally {
+			setLoading(false);
 		}
 	};
 
-	const handleFlutterWaveButtonClick = async () => {
-		if (validateForm()) {
-			setLoading(true);
-			const formSubmitSuccess = await handleServerSubmit();
-
-			if (formSubmitSuccess) {
-				openPaymentModal();
+	const handleProceedToPayment = async () => {
+		if (!isFormSubmitted) {
+			if (validateForm()) {
+				const formSubmitSuccess = await handleServerSubmit();
+				if (formSubmitSuccess) {
+					toast.success("Data validated, now opening payment portal");
+					setFormSuccess(true);
+					setIsFormSubmitted(true);
+					setShowModal(true);
+				}
 			} else {
-				setLoading(false);
-				toast.error("Failed to submit the form. Please try again.");
+				toast.error("Please fill all the fields correctly.");
 			}
 		} else {
-			return false;
+			// If form was already submitted successfully, just open the modal
+			setShowModal(true);
 		}
 	};
 
-	const openPaymentModal = () => {
-		const config = {
-			public_key: "FLWPUBK_TEST-3e645a6227b57e4d2d20ee3591a04362-X",
-			tx_ref: Date.now(),
-			amount: totalPrice,
-			currency: "NGN",
-			payment_options: "card, mobilemoneyghana, ussd",
-			customer: {
-				email: email,
-				phone_number: phone,
-				name: name,
-			},
-			customizations: {
-				title: "Liquiseife",
-				description: "Making everything about you healthy and clean",
-				logo: "/images/liser_logo.png",
-			},
-			callback: (response) => {
-				setLoading(false);
-				console.log(response);
-				if (response.status === "successful") {
-					console.log("Payment successful, now sending form data");
-					closePaymentModal(); // Close the modal programmatically
-					toast.success("Payment was successful!");
-				} else {
-					toast.error("Payment failed. Please try again.");
-				}
-			},
-			onClose: () => {
-				setLoading(false);
-				console.log("Payment closed without completion");
-			},
-		};
-
-		FlutterWaveButton(config).onClick();
+	const config = {
+		public_key: "FLWPUBK_TEST-3e645a6227b57e4d2d20ee3591a04362-X",
+		tx_ref: Date.now(),
+		amount: totalPrice,
+		currency: "NGN",
+		payment_options: "card, mobilemoneyghana, ussd",
+		customer: {
+			email: email,
+			phone_number: phone,
+			name: name,
+		},
+		customizations: {
+			title: "Liquiseife",
+			description: "Making everything about you healthy and clean",
+			logo: "/images/liser_logo.png",
+		},
+		callback: (response) => {
+			if (response.status === "successful") {
+				closePaymentModal();
+				toast.success("Payment was successful!");
+			} else {
+				toast.error("Payment failed. Please try again.");
+			}
+		},
+		onClose: () => {
+			console.log("Payment closed without completion");
+		},
 	};
 
 	return (
@@ -193,7 +192,7 @@ export default function Checkout() {
 								type="text"
 								id="city"
 								name="city"
-								placeholder="Enter City"
+								placeholder="Enter city"
 								value={city}
 								onChange={(event) => setCity(event.target.value)}
 							/>
@@ -201,43 +200,44 @@ export default function Checkout() {
 								<span className="error-label">{errors.city}</span>
 							)}
 						</div>
-						<div className="form-group">
-							<label htmlFor="state">State</label>
-							<input
-								type="text"
-								id="state"
-								name="state"
-								placeholder="State"
-								value={state}
-								onChange={(event) => setState(event.target.value)}
-							/>
-							{errors.state && (
-								<span className="error-label">{errors.state}</span>
-							)}
+						<div className="horizontal-group">
+							<div className="form-group">
+								<label htmlFor="state">State</label>
+								<input
+									type="text"
+									id="state"
+									name="state"
+									placeholder="Enter state"
+									value={state}
+									onChange={(event) => setState(event.target.value)}
+								/>
+								{errors.state && (
+									<span className="error-label">{errors.state}</span>
+								)}
+							</div>
+							<div className="form-group">
+								<label htmlFor="phone">Phone Number</label>
+								<input
+									type="text"
+									id="phone"
+									name="phone"
+									placeholder="Enter Phone Number"
+									value={phone}
+									onChange={(event) => setPhone(event.target.value)}
+								/>
+								{errors.phone && (
+									<span className="error-label">{errors.phone}</span>
+								)}
+							</div>
 						</div>
-						<div className="form-group">
-							<label htmlFor="phone">Phone Number</label>
-							<input
-								type="tel"
-								id="phone"
-								name="phone"
-								placeholder="e.g 08036412971"
-								value={phone}
-								onChange={(event) => setPhone(event.target.value)}
-							/>
-							{errors.phone && (
-								<span className="error-label">{errors.phone}</span>
-							)}
-						</div>
-						<button
-							type="button"
-							className="submit-button"
-							onClick={handleFlutterWaveButtonClick}
-							disabled={loading}
-						>
-							{loading ? "Processing..." : "Continue"}
-						</button>
 					</form>
+					<button
+						className="submit-button"
+						onClick={handleProceedToPayment}
+						disabled={loading}
+					>
+						{loading ? "Processing..." : "Proceed to Payment"}
+					</button>
 				</div>
 				{/* Order Summary Container */}
 				<div className="summary-container">
@@ -257,6 +257,22 @@ export default function Checkout() {
 					</div>
 				</div>
 			</div>
+			{/* Modal for Payment */}
+			{showModal && (
+				<div className="modal">
+					<div className="modal-content">
+						<h3>Make Payment</h3>
+						<div className="modal-buttons">
+							<FlutterWaveButton {...config} className="flutter-btn">
+								Pay with FlutterWaveButton
+							</FlutterWaveButton>
+							<button className="fa-times" onClick={() => setShowModal(false)}>
+								<FaTimes color="#ffff" />
+							</button>
+						</div>
+					</div>
+				</div>
+			)}
 		</div>
 	);
 }

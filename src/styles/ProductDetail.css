@@ -5,25 +5,24 @@
 .product-detail {
     display: flex;
 	flex-wrap: wrap;
-	padding-top: 20px;
-    gap: 20px; /* Space between image and description */
+	padding: 20px 0px 0px 50px;
+    gap: 6rem; /* Space between image and description */
     align-items: flex-start;
 }
 
 .product-img {
-    flex: 1;
-    max-width: 700px; /* Adjust this to control the image size */
+    max-width: 900px;
 }
 
 .product-img img {
     width: 100%;
-    height: auto;
+	height: 400px;
     object-fit: cover;
-    border-radius: 8px; /* Optional: add rounded corners */
 }
 
 .products-description {
 	flex: 1;
+	max-width: 450px;
 }
 .products-description button {
 	padding: 10px 20px;
@@ -40,12 +39,13 @@
 
 
 .products-description .description{
-	line-height: 20px;
+	line-height: 30px;
 	margin: 20px 0px 20px 0px;
 } 
 
 @media (max-width: 704px) {
 	.product-detail{
 		flex-direction: column;
+		gap: 10px;
 	}
 }
